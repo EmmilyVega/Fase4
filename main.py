@@ -302,3 +302,56 @@ cancelar_reserva(reserva_miguel)
 # Intentamos cancelar nuevamente la misma reserva.
 # Esta prueba permite comprobar el control de errores.
 cancelar_reserva(reserva_miguel)
+
+# --------------------------------------------------
+# RESUMEN GENERAL DE FJ RESERVALAB
+# --------------------------------------------------
+
+# Esta funcion muestra la informacion que se ha
+# registrado durante el funcionamiento del sistema.
+def mostrar_resumen():
+
+    print("\n")
+    print("=" * 55)
+    print("              FJ RESERVALAB")
+    print("       RESUMEN GENERAL DE OPERACIONES")
+    print("=" * 55)
+
+    print("\nCLIENTES REGISTRADOS:")
+    for cliente in clientes:
+        print("-", cliente.nombre)
+
+    print("\nSERVICIOS DISPONIBLES:")
+    for servicio in servicios:
+        print("-", servicio.describir())
+
+    print("\nRESERVAS REALIZADAS:")
+    for reserva in reservas:
+        print(
+            f"- {reserva.codigo} | "
+            f"{reserva.cliente.nombre} | "
+            f"{reserva.estado}"
+        )
+
+    print("\nCANTIDAD DE REGISTROS")
+    print("Clientes:", len(clientes))
+    print("Servicios:", len(servicios))
+    print("Reservas:", len(reservas))
+
+    print("\nLos eventos y errores se guardan en logs.log")
+    print("=" * 55)
+
+    registrar_evento("Resumen general del sistema consultado.")
+
+
+# Mostramos el resumen al finalizar las operaciones.
+try:
+    mostrar_resumen()
+
+except Exception as error:
+    print("Se presento un problema al generar el resumen.")
+    registrar_error(f"Error en el resumen general: {error}")
+
+finally:
+    print("\nFJ ReservaLab ha finalizado sus operaciones.")
+    print("Gracias por utilizar nuestro sistema.")
