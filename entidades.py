@@ -1,15 +1,18 @@
 
-# ============================================
-# SOFTWARE FJ
-# Modulo de entidades y gestion de clientes
-# ============================================
+# ==================================================
+# FJ RESERVALAB
+# Empresa: Software FJ
+# Estudiante: Emmily Daniela Vega Rincon
+# Curso: Programacion
+# Actividad: Fase 4
+# ==================================================
 
 from abc import ABC, abstractmethod
 from excepciones import ErrorCliente
 
 
-# Clase abstracta que representa una entidad
-# general del sistema.
+# Esta clase representa los datos generales
+# que pueden compartir las diferentes entidades.
 class Entidad(ABC):
 
     def __init__(self, identificacion, nombre):
@@ -26,21 +29,22 @@ class Entidad(ABC):
 
     @abstractmethod
     def validar(self):
-        """Metodo abstracto para validar los datos."""
+        """Cada entidad debe tener su propia validacion."""
         pass
 
 
-# Clase Cliente que hereda de Entidad.
+# Esta clase representa a las personas que utilizan
+# los servicios disponibles en FJ ReservaLab.
 class Cliente(Entidad):
 
     def __init__(self, identificacion, nombre, correo, telefono):
         super().__init__(identificacion, nombre)
 
-        # Atributos privados para proteger los datos.
+        # Guardamos los datos de contacto como atributos privados.
         self.__correo = correo
         self.__telefono = telefono
 
-        # Validar los datos al crear el cliente.
+        # Antes de aceptar el registro revisamos sus datos.
         self.validar()
 
     @property
@@ -52,7 +56,7 @@ class Cliente(Entidad):
         return self.__telefono
 
     def validar(self):
-        """Verifica que los datos del cliente sean correctos."""
+        """Comprueba que la informacion del cliente sea correcta."""
 
         if not isinstance(self.identificacion, str) or not self.identificacion.strip():
             raise ErrorCliente("La identificacion es obligatoria.")
@@ -60,22 +64,23 @@ class Cliente(Entidad):
         if not isinstance(self.nombre, str) or not self.nombre.strip():
             raise ErrorCliente("El nombre es obligatorio.")
 
-        if not isinstance(self.__correo, str) or "@" not in self.__correo:
+        if not isinstance(self.correo, str) or "@" not in self.correo:
             raise ErrorCliente("El correo electronico no es valido.")
 
-        if "." not in self.__correo.split("@")[-1]:
+        if "." not in self.correo.split("@")[-1]:
             raise ErrorCliente("El correo debe tener un dominio valido.")
 
-        if not isinstance(self.__telefono, str) or not self.__telefono.isdigit():
+        if not isinstance(self.telefono, str) or not self.telefono.isdigit():
             raise ErrorCliente("El telefono debe contener solamente numeros.")
 
-        if len(self.__telefono) < 7:
+        if len(self.telefono) < 7:
             raise ErrorCliente("El telefono debe tener al menos 7 digitos.")
 
         return True
 
     def describir(self):
-        """Devuelve la informacion general del cliente."""
+        """Presenta los datos principales del cliente."""
+
         return (
             f"Cliente: {self.nombre} | "
             f"Identificacion: {self.identificacion} | "
