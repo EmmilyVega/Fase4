@@ -146,6 +146,20 @@ registrar_servicio(kit_conecta)
 registrar_servicio(codigo_claro)
 
 # --------------------------------------------------
+# PRUEBA DE CREACION DE UN SERVICIO INVALIDO
+# --------------------------------------------------
+
+print("\nPRUEBA DE SERVICIO INVALIDO:")
+
+try:
+    servicio_invalido = AlquilerEquipo("Equipo de prueba", -5000)
+    registrar_servicio(servicio_invalido)
+
+except ErrorServicio as error:
+    print("No se pudo crear el servicio:", error)
+    registrar_error(f"Error al crear servicio invalido: {error}")
+
+# --------------------------------------------------
 # GESTION DE RESERVAS
 # --------------------------------------------------
 
@@ -220,15 +234,20 @@ for reserva in (reserva_daniela, reserva_miguel):
     if reserva is not None:
 
         try:
-            mensaje = reserva.confirmar()
-            print(mensaje)
+            resultado = reserva.procesar()
+
+            print(
+                f"Reserva {resultado['codigo']} procesada. "
+                f"Costo: ${resultado['costo']:,.2f} | "
+                f"Estado: {resultado['estado']}"
+            )
 
             registrar_evento(
-                f"Reserva {reserva.codigo} confirmada."
+                f"Reserva {reserva.codigo} procesada correctamente."
             )
 
         except ErrorReserva as error:
-            print(f"No se pudo confirmar: {error}")
+            print(f"No se pudo procesar la reserva: {error}")
             registrar_error(str(error))
 
 # --------------------------------------------------
