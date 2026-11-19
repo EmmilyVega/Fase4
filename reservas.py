@@ -1,8 +1,11 @@
 
-# ============================================
-# SOFTWARE FJ
-# Modulo de gestion de reservas
-# ============================================
+# ==================================================
+# FJ RESERVALAB
+# Empresa: Software FJ
+# Estudiante: Emmily Daniela Vega Rincón
+# Curso: Programación
+# Actividad: Fase 4
+# ==================================================
 
 from datetime import datetime
 from entidades import Cliente
@@ -10,26 +13,27 @@ from servicios import Servicio
 from excepciones import ErrorReserva, ErrorCliente, ErrorServicio
 
 
+# Esta clase permite relacionar un cliente con el
+# servicio que desea utilizar.
 class Reserva:
 
-    # Estados posibles de una reserva
     ESTADOS = ("Pendiente", "Confirmada", "Cancelada")
 
     def __init__(self, codigo, cliente, servicio, duracion):
 
-        # Validar el codigo de la reserva
+        # Revisamos que el codigo de la reserva sea correcto.
         if not isinstance(codigo, str) or not codigo.strip():
             raise ErrorReserva("El codigo de la reserva es obligatorio.")
 
-        # Validar el cliente
+        # Comprobamos que exista un cliente valido.
         if not isinstance(cliente, Cliente):
             raise ErrorCliente("Debe seleccionar un cliente valido.")
 
-        # Validar el servicio
+        # Verificamos que el servicio pertenezca al sistema.
         if not isinstance(servicio, Servicio):
             raise ErrorServicio("Debe seleccionar un servicio valido.")
 
-        # Validar la duracion
+        # Cada servicio revisa sus propias condiciones.
         servicio.validar_parametros(duracion)
 
         self.__codigo = codigo
@@ -59,28 +63,27 @@ class Reserva:
     def estado(self):
         return self.__estado
 
+    # Calculamos el valor de la reserva con opciones
+    # de impuesto y descuento.
     def calcular_costo(self, impuesto=0, descuento=0):
-        """
-        Calcula el costo de la reserva.
-        Permite utilizar impuestos y descuentos opcionales.
-        """
 
-        if not isinstance(impuesto, (int, float)) or isinstance(impuesto, bool) or not 0 <= impuesto <= 100:
+        if (not isinstance(impuesto, (int, float))
+                or isinstance(impuesto, bool) or not 0 <= impuesto <= 100):
             raise ErrorReserva("El impuesto debe estar entre 0 y 100.")
 
-        if not isinstance(descuento, (int, float)) or isinstance(descuento, bool) or not 0 <= descuento <= 100:
+        if (not isinstance(descuento, (int, float))
+                or isinstance(descuento, bool) or not 0 <= descuento <= 100):
             raise ErrorReserva("El descuento debe estar entre 0 y 100.")
 
         costo_base = self.__servicio.calcular_costo(self.__duracion)
 
         costo_con_descuento = costo_base * (1 - descuento / 100)
-
         costo_final = costo_con_descuento * (1 + impuesto / 100)
 
         return round(costo_final, 2)
 
+    # Cambiamos el estado cuando una reserva es confirmada.
     def confirmar(self):
-        """Confirma una reserva pendiente."""
 
         if self.__estado != "Pendiente":
             raise ErrorReserva(
@@ -90,8 +93,8 @@ class Reserva:
         self.__estado = "Confirmada"
         return "Reserva confirmada correctamente."
 
+    # Permitimos cancelar una reserva que no este cancelada.
     def cancelar(self):
-        """Cancela una reserva que no haya sido cancelada."""
 
         if self.__estado == "Cancelada":
             raise ErrorReserva("La reserva ya se encuentra cancelada.")
@@ -99,8 +102,9 @@ class Reserva:
         self.__estado = "Cancelada"
         return "Reserva cancelada correctamente."
 
+    # Procesamos la reserva y controlamos los errores
+    # que puedan presentarse durante la operacion.
     def procesar(self):
-        """Procesa la reserva y controla posibles excepciones."""
 
         try:
             costo = self.calcular_costo()
@@ -124,8 +128,9 @@ class Reserva:
                 f"Proceso de reserva {self.__codigo} finalizado."
             )
 
+    # Mostramos los datos principales para consultar
+    # la informacion de una reserva.
     def describir(self):
-        """Muestra la informacion completa de la reserva."""
 
         return (
             f"Reserva: {self.__codigo}\n"
