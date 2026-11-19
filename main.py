@@ -230,3 +230,75 @@ for reserva in (reserva_daniela, reserva_miguel):
         except ErrorReserva as error:
             print(f"No se pudo confirmar: {error}")
             registrar_error(str(error))
+
+# --------------------------------------------------
+# CALCULO DE COSTOS DE LAS RESERVAS
+# --------------------------------------------------
+
+# Consultamos el valor de una reserva y aplicamos
+# un descuento y el impuesto correspondiente.
+def consultar_costo(reserva, impuesto=0, descuento=0):
+
+    try:
+        if reserva is None:
+            raise DatoFaltante("No existe una reserva para consultar.")
+
+        costo = reserva.calcular_costo(
+            impuesto=impuesto,
+            descuento=descuento
+        )
+
+    except (ErrorReserva, DatoFaltante, ErrorServicio) as error:
+        print(f"No se pudo calcular el costo: {error}")
+        registrar_error(f"Error en el calculo: {error}")
+
+    else:
+        print(f"Costo de la reserva {reserva.codigo}: ${costo:,.2f}")
+        registrar_evento(
+            f"Calculo realizado para la reserva {reserva.codigo}."
+        )
+
+    finally:
+        print("Consulta de costo finalizada.")
+
+
+# Consultamos el costo de la reserva de Daniela
+# con un descuento del 10 % y un impuesto del 19 %.
+consultar_costo(
+    reserva_daniela,
+    impuesto=19,
+    descuento=10
+)
+
+
+# --------------------------------------------------
+# CANCELACION DE RESERVAS
+# --------------------------------------------------
+
+# Esta funcion permite cancelar una reserva existente.
+def cancelar_reserva(reserva):
+
+    try:
+        if reserva is None:
+            raise DatoFaltante("No se encontro la reserva solicitada.")
+
+        mensaje = reserva.cancelar()
+
+    except (ErrorReserva, DatoFaltante) as error:
+        print(f"No se pudo cancelar la reserva: {error}")
+        registrar_error(f"Error al cancelar reserva: {error}")
+
+    else:
+        print(mensaje)
+        registrar_evento(
+            f"Reserva {reserva.codigo} cancelada."
+        )
+
+
+# Cancelamos la reserva de Miguel.
+cancelar_reserva(reserva_miguel)
+
+
+# Intentamos cancelar nuevamente la misma reserva.
+# Esta prueba permite comprobar el control de errores.
+cancelar_reserva(reserva_miguel)
