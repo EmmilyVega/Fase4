@@ -1,34 +1,43 @@
 
-# ============================================
-# SOFTWARE FJ
-# Modulo para el manejo de excepciones
-# ============================================
+# ==================================================
+# FJ RESERVALAB
+# Empresa: Software FJ
+# Estudiante: Emmily Daniela Vega Rincon
+# Curso: Programacion
+# Actividad: Fase 4
+# ==================================================
 
-# Excepcion para errores relacionados con clientes
+
+# Esta excepcion permite identificar problemas
+# cuando se intenta registrar un cliente.
 class ErrorCliente(Exception):
-    """Se genera cuando los datos de un cliente no son validos."""
+    """Controla errores en los datos de los clientes."""
     pass
 
 
-# Excepcion para errores relacionados con servicios
+# Se utiliza cuando un servicio tiene datos incorrectos
+# o no cumple con las condiciones necesarias.
 class ErrorServicio(Exception):
-    """Se genera cuando un servicio no es valido o no esta disponible."""
+    """Controla errores relacionados con los servicios."""
     pass
 
 
-# Excepcion para errores relacionados con reservas
+# Esta excepcion ayuda a detectar problemas al crear,
+# confirmar, cancelar o procesar una reserva.
 class ErrorReserva(Exception):
-    """Se genera cuando ocurre un problema con una reserva."""
+    """Controla errores durante la gestion de reservas."""
     pass
 
 
-# Excepcion para operaciones no permitidas
+# Se genera cuando alguien intenta realizar
+# una accion que no esta permitida en el sistema.
 class OperacionNoPermitida(Exception):
-    """Se genera cuando se intenta realizar una operacion incorrecta."""
+    """Controla las operaciones que no estan permitidas."""
     pass
 
 
-# Excepcion para datos faltantes
+# Nos permite identificar cuando falta algun dato
+# necesario para continuar con una operacion.
 class DatoFaltante(Exception):
-    """Se genera cuando falta informacion obligatoria."""
+    """Controla la ausencia de datos obligatorios."""
     pass
