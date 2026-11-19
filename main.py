@@ -144,3 +144,89 @@ codigo_claro = Asesoria("Codigo Claro", 80000)
 registrar_servicio(sala_horizonte)
 registrar_servicio(kit_conecta)
 registrar_servicio(codigo_claro)
+
+# --------------------------------------------------
+# GESTION DE RESERVAS
+# --------------------------------------------------
+
+# Esta funcion permite crear una reserva y comprobar
+# que los datos enviados sean correctos.
+def crear_reserva(codigo, cliente, servicio, duracion):
+
+    try:
+        nueva_reserva = Reserva(
+            codigo,
+            cliente,
+            servicio,
+            duracion
+        )
+
+        reservas.append(nueva_reserva)
+
+    except (ErrorReserva, ErrorCliente, ErrorServicio) as error:
+        print(f"No fue posible crear la reserva: {error}")
+        registrar_error(f"Error al crear reserva {codigo}: {error}")
+
+        return None
+
+    else:
+        print(f"Reserva {codigo} creada correctamente.")
+        registrar_evento(f"Reserva creada: {codigo}")
+
+        return nueva_reserva
+
+
+# --------------------------------------------------
+# PRIMERAS RESERVAS DEL SISTEMA
+# --------------------------------------------------
+
+# Daniela solicita reservar la Sala Horizonte.
+reserva_daniela = crear_reserva(
+    "FJR-001",
+    daniela,
+    sala_horizonte,
+    3
+)
+
+# Miguel solicita el servicio Kit Conecta.
+reserva_miguel = crear_reserva(
+    "FJR-002",
+    miguel,
+    kit_conecta,
+    4
+)
+
+
+# --------------------------------------------------
+# PRUEBA DE UNA RESERVA INCORRECTA
+# --------------------------------------------------
+
+# Intentamos crear una reserva con una duracion negativa.
+# El sistema debe detectar el error y continuar funcionando.
+reserva_invalida = crear_reserva(
+    "FJR-003",
+    daniela,
+    codigo_claro,
+    -2
+)
+
+
+# --------------------------------------------------
+# CONFIRMACION DE RESERVAS
+# --------------------------------------------------
+
+for reserva in (reserva_daniela, reserva_miguel):
+
+    if reserva is not None:
+
+        try:
+            mensaje = reserva.confirmar()
+            print(mensaje)
+
+            registrar_evento(
+                f"Reserva {reserva.codigo} confirmada."
+            )
+
+        except ErrorReserva as error:
+            print(f"No se pudo confirmar: {error}")
+            registrar_error(str(error))
