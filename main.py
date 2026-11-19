@@ -105,3 +105,42 @@ valentina = registrar_cliente(
     "correo_incorrecto",
     "3204567890"
 )
+
+# --------------------------------------------------
+# REGISTRO DE SERVICIOS
+# --------------------------------------------------
+
+# Creamos una funcion para agregar servicios
+# y comprobar que sus datos sean correctos.
+def registrar_servicio(servicio):
+
+    try:
+        servicios.append(servicio)
+
+    except ErrorServicio as error:
+        print(f"No se pudo registrar el servicio: {error}")
+        registrar_error(f"Error al registrar servicio: {error}")
+
+    else:
+        print(f"Servicio {servicio.nombre} registrado correctamente.")
+        registrar_evento(f"Servicio registrado: {servicio.nombre}")
+
+
+# --------------------------------------------------
+# SERVICIOS DISPONIBLES EN FJ RESERVALAB
+# --------------------------------------------------
+
+# Servicio destinado a reuniones y encuentros.
+sala_horizonte = ReservaSala("Sala Horizonte", 50000)
+
+# Servicio para el alquiler de equipos tecnologicos.
+kit_conecta = AlquilerEquipo("Kit Conecta", 25000)
+
+# Servicio de orientacion y apoyo en tecnologia.
+codigo_claro = Asesoria("Codigo Claro", 80000)
+
+
+# Agregamos los servicios a la lista del sistema.
+registrar_servicio(sala_horizonte)
+registrar_servicio(kit_conecta)
+registrar_servicio(codigo_claro)
